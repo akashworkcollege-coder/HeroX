@@ -24,6 +24,7 @@ class Colors:
     YELLOW = '\033[93m'
     RED = '\033[91m'
     MAGENTA = '\033[35m'
+    GOLD = '\033[93m'  # Same as YELLOW for gold effect
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
     END = '\033[0m'
@@ -36,17 +37,17 @@ class Colors:
 # ============== Enums and Data Classes ==============
 class HeroRank(Enum):
     UNRANKED = 0
-    TOP_10 = 10
-    TOP_9 = 9
-    TOP_8 = 8
-    TOP_7 = 7
-    TOP_6 = 6
-    TOP_5 = 5
-    TOP_4 = 4
-    TOP_3 = 3
-    TOP_2 = 2
-    TOP_1 = 1
-    X = 0  # Special rank above #1
+    RANK_15 = 15
+    RANK_10 = 10
+    RANK_9 = 9
+    RANK_8 = 8
+    RANK_7 = 7
+    RANK_6 = 6
+    RANK_5 = 5
+    RANK_4 = 4
+    RANK_3 = 3
+    RANK_2 = 2
+    RANK_1 = 1  # X is the title for rank #1
 
 
 class TrustLevel(Enum):
@@ -98,8 +99,11 @@ class Hero:
         }
         color = level_colors.get(trust_level, Colors.END)
 
+        # Display X for rank #1, otherwise show the rank number
+        rank_display = 'X' if self.rank.value == 1 else f"#{self.rank.value}" if self.rank.value > 0 else "Unranked"
+
         return (f"{Colors.BOLD}{self.hero_name}{Colors.END} ({self.name})\n"
-                f"Rank: #{self.rank.value if self.rank.value > 0 else 'X'}\n"
+                f"Rank: {rank_display}\n"
                 f"Trust: {color}{self.trust_value}{Colors.END}\n"
                 f"HP: {self.hp}/{self.max_hp}\n"
                 f"Energy: {self.energy}/{self.max_energy}\n"
@@ -113,65 +117,65 @@ class HeroDatabase:
     @staticmethod
     def get_all_heroes() -> List[Hero]:
         return [
-            # X (The mysterious #1)
-            Hero("???", "X", HeroRank.X, 9999,
-                 "Reality Manipulation", "Can alter reality based on public perception"),
+            # Hero X / X (The #1 ranked hero - X is the title for rank 1)
+            Hero("Office Worker", "Hero X", HeroRank.RANK_1, 9999,
+                 "Reality Manipulation", "Controls space and manipulates reality through dimension shifting"),
 
             # Queen (#2)
-            Hero("Queen", "Queen", HeroRank.TOP_2, 950,
-                 "Spear Mastery", "Precision strikes that ignore defenses"),
+            Hero("Liu Yuwei", "Queen", HeroRank.RANK_2, 950,
+                 "Spear Mastery + Area Control", "Creates areas where she dictates the laws of reality"),
 
             # Dragon Boy (#3)
-            Hero("Dragon Boy", "Dragon Boy", HeroRank.TOP_3, 880,
-                 "Dragon Spirit", "Summons dragon energy for massive damage"),
+            Hero("Liang Long", "Dragon Boy", HeroRank.RANK_3, 880,
+                 "Enhanced Strength", "Grows stronger the more injured he becomes"),
 
             # Ghostblade (#4)
-            Hero("Ghostblade", "Ghostblade", HeroRank.TOP_4, 820,
-                 "Silent Assassination", "Attacks that don't alert enemies"),
+            Hero("Wang Yi", "Ghostblade", HeroRank.RANK_4, 820,
+                 "Silent Assassination", "Highly skilled assassin who fights with blades"),
 
-            # The Johnnies (#5)
-            Hero("Little Johnny", "The Johnnies", HeroRank.TOP_5, 750,
-                 "Animal Communication + Immunity", "Tag-team attacks"),
+            # The Johnnies (#5) - Little Johnny & Big Johnny
+            Hero("Ah Johnny", "The Johnnies", HeroRank.RANK_5, 750,
+                 "Animal Communication", "Can speak with animals; Big Johnny is immune to faith powers"),
 
             # Loli (#6)
-            Hero("Loli", "Loli", HeroRank.TOP_6, 680,
-                 "Mech Engineering", "Giant robot support"),
+            Hero("Luo Li", "Loli", HeroRank.RANK_6, 680,
+                 "Mechanical Engineering", "Genius engineer who fights using a mechanical suit"),
 
             # Lucky Cyan (#7)
-            Hero("Lucky Cyan", "Lucky Cyan", HeroRank.TOP_7, 620,
-                 "Music Magic", "Songs that boost allies or debuff enemies"),
+            Hero("Cyan", "Lucky Cyan", HeroRank.RANK_7, 620,
+                 "Supernatural Luck + Music", "Songs bring good fortune and are empowered by faith"),
 
             # Ahu (#8)
-            Hero("Ahu", "Ahu", HeroRank.TOP_8, 550,
-                 "Shape-shifting", "Can transform into any form"),
+            Hero("Ahu", "Ahu", HeroRank.RANK_8, 550,
+                 "Shapeshifting", "A Shar Pei dog who can transform into anything"),
 
             # E-Soul (#9)
-            Hero("E-Soul", "E-Soul", HeroRank.TOP_9, 480,
-                 "Legacy Power", "Inherited hero abilities"),
+            Hero("Yang Cheng", "E-Soul", HeroRank.RANK_9, 480,
+                 "Electrokinesis", "Controls electricity, manipulates machines, moves at super speed"),
 
-            # Lin Ling / The Commoner (#10)
-            Hero("Lin Ling", "The Commoner", HeroRank.TOP_10, 400,
-                 "Determination", "Grows stronger when trust is low"),
+            # Lin Ling / The Commoner (#10) - PROTAGONIST
+            Hero("Lin Ling", "The Commoner", HeroRank.RANK_10, 400,
+                 "Enhanced Strength", "Ordinary civilian forced to become Nice, later develops own hero identity"),
 
-            # Nice (Original hero)
-            Hero("Nice", "Nice", HeroRank.UNRANKED, 300,
-                 "Basic Heroics", "Standard hero abilities"),
+            # Nice (Original hero - rank #15, committed suicide)
+            Hero("Nice", "Nice", HeroRank.RANK_15, 300,
+                 "Flight + Super Strength", "The 'perfect hero' who suffered from OCD due to public perception"),
 
             # Additional characters for variety
-            Hero("Shadow", "Shadow Stalker", HeroRank.UNRANKED, 250,
-                 "Darkness Manipulation", "Controls shadows"),
+            Hero("Wreck", "Wreck", HeroRank.UNRANKED, 280,
+                 "Matter Manipulation", "Can manipulate matter and create structures"),
 
-            Hero("Blaze", "Inferno", HeroRank.UNRANKED, 280,
-                 "Fire Control", "Burns everything"),
+            Hero("Zero", "Zero", HeroRank.UNRANKED, 850,
+                 "Flight + Explosions", "Legendary hero-turned-villain who nearly destroyed the world"),
 
-            Hero("Frost", "Ice Queen", HeroRank.UNRANKED, 270,
-                 "Ice Magic", "Freezes enemies"),
+            Hero("Luo", "Calamity", HeroRank.UNRANKED, 270,
+                 "Bad Luck", "Brings misfortune wherever he goes"),
         ]
 
     @staticmethod
     def get_top_10() -> List[Hero]:
         heroes = HeroDatabase.get_all_heroes()
-        return [h for h in heroes if h.rank.value <= 10][:10]
+        return [h for h in heroes if 1 <= h.rank.value <= 10]
 
     @staticmethod
     def get_hero_by_name(name: str) -> Optional[Hero]:
@@ -200,6 +204,8 @@ class BattleSystem:
         """Damage calculation influenced by trust values"""
         trust_advantage = attacker.trust_value - defender.trust_value
         trust_multiplier = 1.0 + (trust_advantage / 2000)  # Max ~2x damage
+        # Ensure multiplier doesn't go below 0.5 to keep battles fair
+        trust_multiplier = max(0.5, trust_multiplier)
 
         # Critical hit chance based on trust
         crit_chance = min(0.3, attacker.trust_value / 5000)
@@ -267,10 +273,15 @@ class BattleSystem:
                 return True, f"{attacker.hero_name} uses {attacker.special_ability} for {damage} damage!"
             else:
                 print("Not enough energy! Using basic attack instead...")
-                attacker.energy -= 10
-                damage = BattleSystem.calculate_damage(attacker, defender, 15)
-                defender.hp -= damage
-                return True, f"{attacker.hero_name} deals {damage} damage with basic attack!"
+                if attacker.energy >= 10:
+                    attacker.energy -= 10
+                    damage = BattleSystem.calculate_damage(attacker, defender, 15)
+                    defender.hp -= damage
+                    return True, f"{attacker.hero_name} deals {damage} damage with basic attack!"
+                else:
+                    print("Not enough energy for basic attack! Charging instead...")
+                    attacker.energy += 20
+                    return False, f"{attacker.hero_name} charges energy!"
 
         elif choice == 3:  # Ultimate Move
             if attacker.energy >= 40:
@@ -280,10 +291,21 @@ class BattleSystem:
                 return True, f"{Colors.color_text('ULTIMATE MOVE!', Colors.RED)} {attacker.hero_name} unleashes {attacker.power} for {damage} damage!"
             else:
                 print("Not enough energy! Using special instead...")
-                attacker.energy -= 25
-                damage = BattleSystem.calculate_damage(attacker, defender, 30)
-                defender.hp -= damage
-                return True, f"{attacker.hero_name} uses {attacker.special_ability} for {damage} damage!"
+                if attacker.energy >= 25:
+                    attacker.energy -= 25
+                    damage = BattleSystem.calculate_damage(attacker, defender, 30)
+                    defender.hp -= damage
+                    return True, f"{attacker.hero_name} uses {attacker.special_ability} for {damage} damage!"
+                elif attacker.energy >= 10:
+                    print("Not enough energy for special! Using basic attack instead...")
+                    attacker.energy -= 10
+                    damage = BattleSystem.calculate_damage(attacker, defender, 15)
+                    defender.hp -= damage
+                    return True, f"{attacker.hero_name} deals {damage} damage with basic attack!"
+                else:
+                    print("Not enough energy for any attack! Charging instead...")
+                    attacker.energy += 20
+                    return False, f"{attacker.hero_name} charges energy!"
 
         else:  # Charge
             attacker.energy += 20
@@ -421,42 +443,42 @@ class RankingTournamentMode:
                 print(f"Final rank: #{current_rank}")
                 return current_rank
 
-        # Final battle with X
-        print(f"\n{Colors.color_text('FINAL BATTLE: VS X!', Colors.YELLOW)}")
-        x_hero = HeroDatabase.get_hero_by_name("X")
+        # Final battle with Hero X (the rank #1 hero)
+        print(f"\n{Colors.color_text('FINAL BATTLE: VS HERO X!', Colors.YELLOW)}")
+        x_hero = HeroDatabase.get_hero_by_name("Hero X")
         if x_hero:
             player_hero.hp = player_hero.max_hp
             player_hero.energy = player_hero.max_energy
 
-            # Special X battle - X has reality manipulation
-            print(f"\n{Colors.MAGENTA}X: 'Let's see if your trust can overcome reality itself...'{Colors.END}")
+            # Special Hero X battle - Hero X has reality manipulation
+            print(f"\n{Colors.MAGENTA}Hero X: 'Let's see if your trust can overcome reality itself...'{Colors.END}")
 
             while player_hero.hp > 0 and x_hero.hp > 0:
-                # X's reality manipulation affects the battle
+                # Hero X's reality manipulation affects the battle
                 if random.random() < 0.2:
-                    print(f"\n{Colors.RED}X warps reality!{Colors.END}")
+                    print(f"\n{Colors.RED}Hero X warps reality through dimension shifting!{Colors.END}")
                     if random.choice([True, False]):
                         player_hero.hp -= 30
                         print(f"You take 30 damage from reality fracture!")
                     else:
                         x_hero.hp -= 30
-                        print(f"X takes 30 damage from reality fracture!")
+                        print(f"Hero X takes 30 damage from reality fracture!")
 
                 # Player turn
                 hit, message = BattleSystem.battle_turn(player_hero, x_hero)
                 print(message)
 
                 if x_hero.hp <= 0:
-                    print(f"\n{Colors.color_text('INCREDIBLE! You defeated X!', Colors.GOLD)}")
-                    print(f"{Colors.BOLD}You have become the new X!{Colors.END}")
-                    return 0  # X rank
+                    print(f"\n{Colors.color_text('INCREDIBLE! You defeated Hero X!', Colors.GOLD)}")
+                    print(f"{Colors.BOLD}You have become the new rank #1 hero - X!{Colors.END}")
+                    return 1  # Rank 1 (X title)
 
-                # X's turn
+                # Hero X's turn
                 time.sleep(1)
-                print(f"\nX's turn...")
+                print(f"\nHero X's turn...")
                 damage = BattleSystem.calculate_damage(x_hero, player_hero, 45)
                 player_hero.hp -= damage
-                print(f"X attacks for {damage} damage!")
+                print(f"Hero X attacks for {damage} damage!")
 
         return current_rank
 
@@ -596,8 +618,8 @@ class StoryMode:
             },
             {
                 "name": "Chapter 8: The Final Trial",
-                "desc": "Face X himself and prove you deserve the title!",
-                "enemy": HeroDatabase.get_hero_by_name("X"),
+                "desc": "Face Hero X himself and prove you deserve the rank #1 title!",
+                "enemy": HeroDatabase.get_hero_by_name("Hero X"),
                 "trust_reward": 1000
             }
         ]
@@ -651,7 +673,7 @@ class StoryMode:
             print(f"\n{Colors.color_text('Chapter Complete!', Colors.GREEN)}")
             time.sleep(1)
 
-        print(f"\n{Colors.color_text('CONGRATULATIONS! You completed the story and became X!', Colors.GOLD)}")
+        print(f"\n{Colors.color_text('CONGRATULATIONS! You completed the story and earned the X title (rank #1)!', Colors.GOLD)}")
         return "Complete"
 
 
@@ -692,8 +714,8 @@ class ToBeHeroXGame:
                     self.player_hero = hero
                     print(f"\n{Colors.GREEN}Game loaded! Welcome back, {hero.hero_name}!{Colors.END}")
                     return True
-            except:
-                print(f"\n{Colors.RED}Failed to load save file.{Colors.END}")
+            except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:
+                print(f"\n{Colors.RED}Failed to load save file: {e}{Colors.END}")
         return False
 
     def select_hero(self) -> Hero:
@@ -752,6 +774,9 @@ class ToBeHeroXGame:
 
         try:
             choice1 = int(input("\nChoose (1-{}): ".format(len(heroes)))) - 1
+            if choice1 < 0 or choice1 >= len(heroes):
+                print(f"{Colors.RED}Invalid selection.{Colors.END}")
+                return
             hero1 = heroes[choice1]
 
             print("\nSelect second hero:")
@@ -759,13 +784,18 @@ class ToBeHeroXGame:
                 print(f"{i}. {hero.hero_name}")
 
             choice2 = int(input("\nChoose (1-{}): ".format(len(heroes)))) - 1
+            if choice2 < 0 or choice2 >= len(heroes):
+                print(f"{Colors.RED}Invalid selection.{Colors.END}")
+                return
             hero2 = heroes[choice2]
 
-            # Create copies for battle
+            # Create copies for battle with proper HP and energy values
             h1 = Hero(hero1.name, hero1.hero_name, hero1.rank,
-                      hero1.trust_value, hero1.power, hero1.special_ability)
+                      hero1.trust_value, hero1.power, hero1.special_ability,
+                      hero1.hp, hero1.max_hp, hero1.energy, hero1.max_energy)
             h2 = Hero(hero2.name, hero2.hero_name, hero2.rank,
-                      hero2.trust_value, hero2.power, hero2.special_ability)
+                      hero2.trust_value, hero2.power, hero2.special_ability,
+                      hero2.hp, hero2.max_hp, hero2.energy, hero2.max_energy)
 
             print(f"\n{Colors.YELLOW}BATTLE: {h1.hero_name} vs {h2.hero_name}{Colors.END}")
 
